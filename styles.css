@@ -1,0 +1,30 @@
+
+
+/*
+font-family: 'Comfortaa', cursive;
+font-family: 'Nanum Gothic Coding', monospace;
+*/
+
+.title {
+  text-align: center;
+  font-size: 56px;
+  font-family: 'Comfortaa', cursive;
+}
+
+#canvas-container {
+  margin: 0px auto;
+  width: 1000px;
+  height: 1000px;
+  /* border-radius: 5px;
+  border-style: solid;
+  border-color: green;
+  border-width: 2px; */
+}
+
+#canvas  {
+  margin: 10%;
+  border-radius: 10px;
+  border-style: solid;
+  border-color: green;
+  border-width: 10px;
+}
