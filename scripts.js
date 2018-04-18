@@ -23,7 +23,7 @@ function Seed(context) {
   this.defaultWidth = 2;
   this.radCoef = (Math.PI / 3);
   this.stretch = 0;
-  this.radRotate = Math.PI/360;
+  this.radRotate = Math.PI/540;
 
   this.init = function() {
     // center circle layer
@@ -57,6 +57,15 @@ function Seed(context) {
                                color: 'rgb(200, 200, 100)'
                             });
     }
+    // layer 3
+    this.arcLayers.push([]);
+    for (let i = 0; i < 6; i++) {
+      this.arcLayers[3].push({ x:     150,
+                               y:     0,
+                               r:     50,
+                               color: 'rgb(100, 200, 100)'
+                            });
+    }
 
   }; // init
 
@@ -77,6 +86,7 @@ function Seed(context) {
     this.ctx.arc(this.arcLayers[0][0].x,this.arcLayers[0][0].y,this.arcLayers[0][0].r,0,360);
     this.ctx.stroke();
 
+    // layer 1
     for (let i = 0; i < this.arcLayers[1].length; i++) {
       this.ctx.beginPath();
       this.ctx.strokeStyle = this.arcLayers[1][i].color;
@@ -101,7 +111,7 @@ function Seed(context) {
       this.ctx.translate(-400,-400);
       this.ctx.stroke();
     }
-
+    // layer 2 light arcs
     for (let j = 6; j < this.arcLayers[2].length; j++) {
       this.ctx.beginPath();
       this.ctx.strokeStyle = this.arcLayers[2][j].color;
@@ -110,6 +120,19 @@ function Seed(context) {
       this.ctx.rotate( (this.radCoef * j) + (this.radCoef/2) );
       this.ctx.arc(this.arcLayers[2][j].x+this.stretch,this.arcLayers[2][j].y,this.arcLayers[2][j].r,0,360);
       this.ctx.rotate( (this.radCoef * -j) - (this.radCoef/2) );
+      this.ctx.translate(-400,-400);
+      this.ctx.stroke();
+    }
+
+    // layer 3
+    for (let k = 0; k < this.arcLayers[3].length; k++) {
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = this.arcLayers[3][k].color;
+      this.ctx.lineWidth = this.defaultWidth;
+      this.ctx.translate(400,400);
+      this.ctx.rotate( this.radCoef * k );
+      this.ctx.arc(this.arcLayers[3][k].x+this.stretch,this.arcLayers[3][k].y,this.arcLayers[3][k].r,0,360);
+      this.ctx.rotate( this.radCoef * -k );
       this.ctx.translate(-400,-400);
       this.ctx.stroke();
     }
