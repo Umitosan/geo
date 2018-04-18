@@ -6,13 +6,14 @@ font-family: 'Nanum Gothic Coding', monospace;
 */
 
 .title {
+  margin-top: 30px;
   text-align: center;
   font-size: 56px;
   font-family: 'Comfortaa', cursive;
 }
 
 #canvas-container {
-  margin: 0px auto;
+  margin: 0px auto 0px auto;
   width: 1000px;
   height: 1000px;
   /* border-radius: 5px;
@@ -22,7 +23,7 @@ font-family: 'Nanum Gothic Coding', monospace;
 }
 
 #canvas  {
-  margin: 10%;
+  margin: 30px 10%;
   border-radius: 10px;
   border-style: solid;
   border-color: green;

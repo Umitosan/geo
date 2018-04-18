@@ -1,9 +1,9 @@
 /* jshint esversion: 6 */
 
 
-// ltGreen = 'rgb(200, 200, 100)'
 // moss    = 'rgb(100, 200, 100)'
-// blue    =  rgb(30, 30, 255);
+// ltGreen = 'rgb(200, 200, 100)'
+// blue    = 'rgb(30, 30, 255)';
 
 var myReq;
 var canvas;
@@ -11,9 +11,9 @@ var ctx;
 var mySeed;
 
 
-function Arc(x,y,r,color) {
-
-}
+// function Arc(x,y,r,color) {
+//
+// }
 
 
 function Seed(context) {
@@ -24,52 +24,88 @@ function Seed(context) {
 
   this.init = function() {
     // center circle layer
-    this.arcLayers.push( [{ x:     400,
+    this.arcLayers.push([{  x:     400,
                             y:     400,
                             r:     50,
-                            color: 'rgb(100, 200, 100)'
-                          }]
-                        );
+                            color: 'rgb(200, 200, 100)'
+                        }]);
     // layer 1
-    for (var i = 0; i < 6; i++) { // inner circle
-      this.arcLayers.push( {x: 50, y: 0,r: 50} );
+    this.arcLayers.push([]);
+    for (let i = 0; i < 6; i++) {
+      this.arcLayers[1].push({ x:     50,
+                               y:     0,
+                               r:     50,
+                               color: 'rgb(100, 200, 100)'
+                            });
+    }
+    // layer 2
+    this.arcLayers.push([]);
+    for (let i = 0; i < 6; i++) {
+      this.arcLayers[2].push({ x:     100,
+                               y:     0,
+                               r:     50,
+                               color: 'rgb(100, 200, 100)'
+                            });
+    }
+    for (let i = 0; i < 6; i++) {
+      this.arcLayers[2].push({ x:     87,
+                               y:     0,
+                               r:     50,
+                               color: 'rgb(30, 30, 255)'
+                            });
     }
 
-  };
+  }; // init
 
   this.draw = function() {
-    // draw the center circle
-    // this.ctx.lineWidth = 10;
     // this.ctx.lineJoin = 'round';
-    // this.ctx.strokeStyle = 'rgb(200, 200, 100)';
-
     // this.ctx.save();
 
+    clearCanvas();
+
+    // draw the center circle
     this.ctx.beginPath();
     this.ctx.strokeStyle = this.arcLayers[0][0].color;
-    this.ctx.lineWidth = 10;
+    this.ctx.lineWidth = 1;
     this.ctx.arc(this.arcLayers[0][0].x,this.arcLayers[0][0].y,this.arcLayers[0][0].r,0,360);
     this.ctx.stroke();
 
-    // for (let i = 1; i < this.arcs.length; i++) {
-    //   this.ctx.beginPath();
-    //   this.ctx.strokeStyle = this.color;
-    //   this.ctx.lineWidth = 3;
-    //   this.ctx.translate(400,400);
-    //   this.ctx.rotate(  this.radCoef * i  );
-    //   this.ctx.arc(this.arcs[i].x,this.arcs[i].y,this.arcs[i].r,0,360);
-    //   this.ctx.rotate(  this.radCoef * -i  );
-    //   this.ctx.translate(-400,-400);
-    //   this.ctx.stroke();
-    // }
+    for (let i = 0; i < this.arcLayers[1].length; i++) {
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = this.arcLayers[1][i].color;
+      this.ctx.lineWidth = 1;
+      this.ctx.translate(400,400);
+      this.ctx.rotate( this.radCoef * i );
+      this.ctx.arc(this.arcLayers[1][i].x,this.arcLayers[1][i].y,this.arcLayers[1][i].r,0,360);
+      this.ctx.rotate( this.radCoef * -i );
+      this.ctx.translate(-400,-400);
+      this.ctx.stroke();
+    }
 
-    // this.ctx.restore();
+    // layer 2
+    for (let j = 0; j < this.arcLayers[2].length/2; j++) {
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = this.arcLayers[2][j].color;
+      this.ctx.lineWidth = 1;
+      this.ctx.translate(400,400);
+      this.ctx.rotate( this.radCoef * j );
+      this.ctx.arc(this.arcLayers[2][j].x,this.arcLayers[2][j].y,this.arcLayers[2][j].r,0,360);
+      this.ctx.rotate( this.radCoef * -j );
+      this.ctx.translate(-400,-400);
+      this.ctx.stroke();
+    }
 
-    // this.ctx.beginPath();
-    // this.ctx.moveTo(40, 40);
-    // this.ctx.lineTo(240, 40);
-    // this.ctx.lineTo(240, 80);
-    // this.ctx.stroke();
+    for (let j = 6; j < this.arcLayers[2].length; j++) {
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = this.arcLayers[2][j].color;
+      this.ctx.lineWidth = 1;
+      this.ctx.translate(400,400);
+      this.ctx.rotate( (this.radCoef * j) + (this.radCoef/2) );
+      this.ctx.arc(this.arcLayers[2][j].x,this.arcLayers[2][j].y,this.arcLayers[2][j].r,0,360);
+      this.ctx.rotate( (this.radCoef * -j) - (this.radCoef/2) );
+      this.ctx.translate(-400,-400);
+      this.ctx.stroke();
+    }
 
   };
 
@@ -100,7 +136,6 @@ function clearCanvas() {
 // GAMELOOP
 function gameLoop(timestamp) {
   myReq = requestAnimationFrame(gameLoop);
-  clearCanvas();
   // mySeed.update();
   mySeed.draw();
 } // gameLoop
