@@ -36,6 +36,8 @@ function Seed(context) {
   this.radRotate = Math.PI/540;
 
   this.init = function() {
+    let radius = 50;
+    let layerNumber = 0;
     // center circle layer
     this.arcLayers.push([{  x:     400,
                             y:     400,
@@ -44,10 +46,10 @@ function Seed(context) {
                         }]);
     // layer 1
     let rc1 = randColor('rgba');
+    layer = 1;
     this.arcLayers.push([]);
-    let radius = 50;
     for (let i = 0; i < 6; i++) {
-      let theta = i * (Math.PI / 3);
+      let theta = i * (Math.PI / (3*layer));
       let computedX = radius * Math.cos(theta);
       let computedY = radius * Math.sin(theta);
       this.arcLayers[1].push({ x:     computedX,
@@ -57,15 +59,19 @@ function Seed(context) {
                             });
     }
     // layer 2
-    // let rc2 = randColor('rgba');
-    // this.arcLayers.push([]);
-    // for (let i = 0; i < 6; i++) {
-    //   this.arcLayers[2].push({ x:     100,
-    //                            y:     0,
-    //                            r:     50,
-    //                            color: rc2
-    //                         });
-    // }
+    let rc2 = randColor('rgba');
+    layer = 2;
+    this.arcLayers.push([]);
+    for (let i = 0; i < 6; i++) {
+      let theta = i * (Math.PI / (3));
+      let computedX = radius * Math.cos(theta)*layer;
+      let computedY = radius * Math.sin(theta)*layer;
+      this.arcLayers[2].push({ x:     computedX,
+                               y:     computedY,
+                               r:     radius,
+                               color: rc2
+                            });
+    }
     // for (let i = 0; i < 6; i++) {
     //   this.arcLayers[2].push({ x:     87,
     //                            y:     0,
@@ -114,17 +120,15 @@ function Seed(context) {
     }
 
     // layer 2
-    // for (let j = 0; j < this.arcLayers[2].length/2; j++) {
-    //   this.ctx.beginPath();
-    //   this.ctx.strokeStyle = this.arcLayers[2][j].color;
-    //   this.ctx.lineWidth = this.defaultWidth;
-    //   this.ctx.translate(400,400);
-    //   this.ctx.rotate( this.radCoef * j );
-    //   this.ctx.arc(this.arcLayers[2][j].x+this.stretch,this.arcLayers[2][j].y,this.arcLayers[2][j].r,0,360);
-    //   this.ctx.rotate( this.radCoef * -j );
-    //   this.ctx.translate(-400,-400);
-    //   this.ctx.stroke();
-    // }
+    for (let j = 0; j < this.arcLayers[2].length; j++) {
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = this.arcLayers[2][j].color;
+      this.ctx.lineWidth = this.defaultWidth;
+      this.ctx.translate(400,400);
+      this.ctx.arc(this.arcLayers[2][j].x,this.arcLayers[2][j].y,this.arcLayers[2][j].r,0,360);
+      this.ctx.translate(-400,-400);
+      this.ctx.stroke();
+    }
     // // layer 2 light arcs
     // for (let j = 6; j < this.arcLayers[2].length; j++) {
     //   this.ctx.beginPath();
