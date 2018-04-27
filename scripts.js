@@ -34,9 +34,12 @@ function Seed(context) {
   this.radCoef = (Math.PI / 3);
   this.stretch = 0;
   this.radRotate = Math.PI/540;
+  this.cr = 50; // base circle radius
+  // this.linex = 0;
+  // this.liney = 0;
 
   this.init = function() {
-    let radius = 50;
+    let radius = this.cr;
     let layerNumber = 0;
     // center circle layer
     this.arcLayers.push([{  x:     400,
@@ -72,22 +75,27 @@ function Seed(context) {
                                color: rc2
                             });
     }
-    // for (let i = 0; i < 6; i++) {
-    //   this.arcLayers[2].push({ x:     87,
-    //                            y:     0,
-    //                            r:     50,
-    //                            color: rc2
-    //                         });
-    // }
-    // layer 3
-    // this.arcLayers.push([]);
-    // for (let i = 0; i < 6; i++) {
-    //   this.arcLayers[3].push({ x:     150,
-    //                            y:     0,
-    //                            r:     50,
-    //                            color: 'rgb(100, 200, 100)'
-    //                         });
-    // }
+    let rc2a = randColor('rgba');
+    // d = distance between centers
+    let d = mySeed.arcLayers[2][0].x - mySeed.arcLayers[1][0].x;
+    let r1 = mySeed.arcLayers[1][0].r;
+    let r2 = mySeed.arcLayers[2][0].r;
+    // x = ( d^2 - r2^2 + r1^2) / ( 2d )
+    let x = ( (Math.pow(d,2) - Math.pow(r2,2) + Math.pow(r1,2)) / ( 2*d ) ) + r1;
+    // tan(angle) = opp / adj
+    // y = x * tan(angle)
+    let y = x * Math.tan(Math.PI / 6);
+    let nRadius = Math.sqrt( Math.pow(x,2) + Math.pow(y,2) );
+    for (let i = 0; i < 6; i++) {
+      let theta = i * (Math.PI / 3) + (Math.PI / 6);
+      let computedX = nRadius * Math.cos(theta);
+      let computedY = nRadius * Math.sin(theta);
+      this.arcLayers[2].push({ x:     computedX,
+                               y:     computedY,
+                               r:     radius,
+                               color: rc2a
+                            });
+    }
 
   }; // init
 
@@ -100,6 +108,14 @@ function Seed(context) {
     // this.ctx.translate(-400,-400);
 
     clearCanvas();
+
+    // draw tmp intersection liney
+    // this.ctx.beginPath();
+    // this.ctx.translate(400,400);
+    // this.ctx.moveTo(-400,this.liney);
+    // this.ctx.lineTo(400,this.liney);
+    // this.ctx.translate(-400,-400);
+    // this.ctx.stroke();
 
     // draw the center circle
     this.ctx.beginPath();
