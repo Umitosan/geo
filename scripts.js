@@ -277,7 +277,7 @@ function invertRGBAstr(str) {
 // GAMELOOP
 function gameLoop(timestamp) {
   myReq = requestAnimationFrame(gameLoop);
-  // mySeed.update();
+  mySeed.update();
   mySeed.draw();
 } // gameLoop
 
@@ -288,7 +288,6 @@ $(document).ready( function() {
   ctx =  canvas.getContext('2d');
   mySeed = new Seed(ctx);
   mySeed.init();
-  // mySeed.draw();
   myReq = requestAnimationFrame(gameLoop);
 
 });
