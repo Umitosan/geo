@@ -35,8 +35,6 @@ function Seed(context) {
   this.stretch = 0;
   this.radRotate = Math.PI/540;
   this.cr = 50; // base circle radius
-  // this.linex = 0;
-  // this.liney = 0;
 
   this.init = function() {
     let radius = this.cr;
@@ -75,6 +73,7 @@ function Seed(context) {
                                color: rc2
                             });
     }
+    // layer 2a
     let rc2a = randColor('rgba');
     // d = distance between centers
     let d = mySeed.arcLayers[2][0].x - mySeed.arcLayers[1][0].x;
@@ -96,18 +95,59 @@ function Seed(context) {
                                color: rc2a
                             });
     }
+    // layer 3
+    let rc3 = randColor('rgba');
+    layer = 3;
+    this.arcLayers.push([]);
+    for (let i = 0; i < 6; i++) {
+      let theta = i * (Math.PI / (3));
+      let computedX = radius * Math.cos(theta)*layer;
+      let computedY = radius * Math.sin(theta)*layer;
+      this.arcLayers[3].push({ x:     computedX,
+                               y:     computedY,
+                               r:     radius,
+                               color: rc3
+                            });
+    }
+    // layer 3a
+    let rc3a = randColor('rgba');
+    layer = 3;
+    for (let i = 0; i < 6; i++) {
+      let xdif, ydif;
+      if (i !== 5) {
+        xdif = this.arcLayers[3][i].x - this.arcLayers[3][i+1].x;
+        ydif = this.arcLayers[3][i].y - this.arcLayers[3][i+1].y;
+      } else {
+        xdif = this.arcLayers[3][5].x - this.arcLayers[3][0].x;
+        ydif = this.arcLayers[3][5].y - this.arcLayers[3][0].y;
+      }
+      let someX1 = this.arcLayers[3][i].x - (xdif/3);
+      let someY1 = this.arcLayers[3][i].y - (ydif/3);
+      let someX2 = this.arcLayers[3][i].x - (2*xdif/3);
+      let someY2 = this.arcLayers[3][i].y - (2*ydif/3);
+      this.arcLayers[3].push({ x:     someX1,
+                               y:     someY1,
+                               r:     radius,
+                               color: rc3a
+                            });
+      this.arcLayers[3].push({ x:     someX2,
+                               y:     someY2,
+                               r:     radius,
+                               color: rc3a
+                            });
+    }
+
+
 
   }; // init
 
   this.draw = function() {
-    // this.ctx.lineJoin = 'round';
-    // this.ctx.save();
+    let cl = 0; // cl = current layer
+    clearCanvas();
 
     // this.ctx.translate(400,400);
     // this.ctx.rotate( this.radRotate );
     // this.ctx.translate(-400,-400);
-
-    clearCanvas();
 
     // draw tmp intersection liney
     // this.ctx.beginPath();
@@ -125,51 +165,41 @@ function Seed(context) {
     this.ctx.stroke();
 
     // layer 1
-    for (let i = 0; i < this.arcLayers[1].length; i++) {
+    cl = 1;
+    for (let i = 0; i < this.arcLayers[cl].length; i++) {
       this.ctx.beginPath();
-      this.ctx.strokeStyle = this.arcLayers[1][i].color;
+      this.ctx.strokeStyle = this.arcLayers[cl][i].color;
       this.ctx.lineWidth = this.defaultWidth;
       this.ctx.translate(400,400);
-      this.ctx.arc(this.arcLayers[1][i].x,this.arcLayers[1][i].y,this.arcLayers[1][i].r,0,360);
+      this.ctx.arc(this.arcLayers[cl][i].x,this.arcLayers[cl][i].y,this.arcLayers[cl][i].r,0,360);
       this.ctx.translate(-400,-400);
       this.ctx.stroke();
     }
 
     // layer 2
-    for (let j = 0; j < this.arcLayers[2].length; j++) {
+    cl = 2;
+    for (let j = 0; j < this.arcLayers[cl].length; j++) {
       this.ctx.beginPath();
-      this.ctx.strokeStyle = this.arcLayers[2][j].color;
+      this.ctx.strokeStyle = this.arcLayers[cl][j].color;
       this.ctx.lineWidth = this.defaultWidth;
       this.ctx.translate(400,400);
-      this.ctx.arc(this.arcLayers[2][j].x,this.arcLayers[2][j].y,this.arcLayers[2][j].r,0,360);
+      this.ctx.arc(this.arcLayers[cl][j].x,this.arcLayers[cl][j].y,this.arcLayers[cl][j].r,0,360);
       this.ctx.translate(-400,-400);
       this.ctx.stroke();
     }
-    // // layer 2 light arcs
-    // for (let j = 6; j < this.arcLayers[2].length; j++) {
-    //   this.ctx.beginPath();
-    //   this.ctx.strokeStyle = this.arcLayers[2][j].color;
-    //   this.ctx.lineWidth = this.defaultWidth;
-    //   this.ctx.translate(400,400);
-    //   this.ctx.rotate( (this.radCoef * j) + (this.radCoef/2) );
-    //   this.ctx.arc(this.arcLayers[2][j].x+this.stretch,this.arcLayers[2][j].y,this.arcLayers[2][j].r,0,360);
-    //   this.ctx.rotate( (this.radCoef * -j) - (this.radCoef/2) );
-    //   this.ctx.translate(-400,-400);
-    //   this.ctx.stroke();
-    // }
 
     // layer 3
-    // for (let k = 0; k < this.arcLayers[3].length; k++) {
-    //   this.ctx.beginPath();
-    //   this.ctx.strokeStyle = this.arcLayers[3][k].color;
-    //   this.ctx.lineWidth = this.defaultWidth;
-    //   this.ctx.translate(400,400);
-    //   this.ctx.rotate( this.radCoef * k );
-    //   this.ctx.arc(this.arcLayers[3][k].x+this.stretch,this.arcLayers[3][k].y,this.arcLayers[3][k].r,0,360);
-    //   this.ctx.rotate( this.radCoef * -k );
-    //   this.ctx.translate(-400,-400);
-    //   this.ctx.stroke();
-    // }
+    cl = 3; // cl = current layer
+    for (let j = 0; j < this.arcLayers[cl].length; j++) {
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = this.arcLayers[cl][j].color;
+      this.ctx.lineWidth = this.defaultWidth;
+      this.ctx.translate(400,400);
+      this.ctx.arc(this.arcLayers[cl][j].x,this.arcLayers[cl][j].y,this.arcLayers[cl][j].r,0,360);
+      this.ctx.translate(-400,-400);
+      this.ctx.stroke();
+    }
+
 
   };
 
