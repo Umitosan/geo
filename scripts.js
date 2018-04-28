@@ -40,7 +40,8 @@ function Seed(context) {
     let radius = this.cr;
     let cl;
 
-    let rc0 = randColor('rgba');
+    // let rc0 = randColor('rgba');
+    let rc0 = randColorPimary('r');
     let layerNumber = 0;
     // center circle layer
     this.arcLayers.push([{  x:     400,
@@ -49,7 +50,8 @@ function Seed(context) {
                             color: rc0
                         }]);
     // layer 1
-    let rc1 = randColor('rgba');
+    // let rc1 = randColor('rgba');
+    let rc1 = randColorPimary('r');
     cl = 1;
     this.arcLayers.push([]);
     for (let i = 0; i < 6; i++) {
@@ -63,7 +65,8 @@ function Seed(context) {
                             });
     }
     // layer 2
-    let rc2 = randColor('rgba');
+    // let rc2 = randColor('rgba');
+    let rc2 = randColorPimary('b');
     cl = 2;
     this.arcLayers.push([]);
     for (let i = 0; i < 6; i++) {
@@ -77,7 +80,8 @@ function Seed(context) {
                             });
     }
     // layer 2a
-    let rc2a = randColor('rgba');
+    // let rc2a = randColor('rgba');
+    let rc2a = randColorPimary('b');
     // d = distance between centers
     let d = mySeed.arcLayers[2][0].x - mySeed.arcLayers[1][0].x;
     let r1 = mySeed.arcLayers[1][0].r;
@@ -99,7 +103,8 @@ function Seed(context) {
                             });
     }
     // layer 3
-    let rc3 = randColor('rgba');
+    // let rc3 = randColor('rgba');
+    let rc3 = randColorPimary('b');
     cl = 3;
     this.arcLayers.push([]);
     for (let i = 0; i < 6; i++) {
@@ -113,7 +118,8 @@ function Seed(context) {
                             });
     }
     // layer 3a
-    let rc3a = randColor('rgba');
+    // let rc3a = randColor('rgba');
+    let rc3a = randColorPimary('b');
     cl = 3;
     for (let i = 0; i < 6; i++) {
       let xdif, ydif;
@@ -141,7 +147,8 @@ function Seed(context) {
     }
 
     // layer 4
-    let rc4 = randColor('rgba');
+    // let rc4 = randColor('rgba');
+    let rc4 = randColorPimary('g');
     cl = 4;
     this.arcLayers.push([]);
     for (let i = 0; i < 6; i++) {
@@ -155,7 +162,8 @@ function Seed(context) {
                             });
     }
     // layer 4a
-    let rc4a = randColor('rgba');
+    // let rc4a = randColor('rgba');
+    let rc4a = randColorPimary('g');
     cl = 4;
     for (let i = 0; i < 6; i++) {
       let xdif, ydif;
@@ -204,14 +212,8 @@ function Seed(context) {
     // this.ctx.translate(-400,-400);
     // this.ctx.stroke();
 
-    // draw the center circle
-    this.ctx.beginPath();
-    this.ctx.strokeStyle = this.arcLayers[0][0].color;
-    this.ctx.lineWidth = this.defaultWidth;
-    this.ctx.arc(this.arcLayers[0][0].x,this.arcLayers[0][0].y,this.arcLayers[0][0].r,0,360);
-    this.ctx.stroke();
-
-    for (var i = 1; i < this.arcLayers.length; i++) {
+    // paint layers from outside in so that inner layers are very visible
+    for (var i = this.arcLayers.length-1; i > 0; i--) {
       let cl = i;
       for (var j = 0; j < this.arcLayers[cl].length; j++) {
         this.ctx.beginPath();
@@ -223,6 +225,13 @@ function Seed(context) {
         this.ctx.stroke();
       }
     }
+
+    // draw the center circle
+    this.ctx.beginPath();
+    this.ctx.strokeStyle = this.arcLayers[0][0].color;
+    this.ctx.lineWidth = this.defaultWidth;
+    this.ctx.arc(this.arcLayers[0][0].x,this.arcLayers[0][0].y,this.arcLayers[0][0].r,0,360);
+    this.ctx.stroke();
 
   };
 
@@ -260,6 +269,20 @@ function randColor(type) {
     return ( 'rgba('+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+1+')' );
   } else {
     console.log("Not valid option for randColor()");
+    return undefined;
+  }
+}
+
+function randColorPimary(emphasis) {
+  let lowbound = 100;
+  if (emphasis === "r") {
+    return ( 'rgba('+ getRandomIntInclusive(lowbound,255) +','+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(0,lowbound) +','+1+')' );
+  } else if (emphasis === "g") {
+    return ( 'rgba('+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(100,255) +','+ getRandomIntInclusive(0,lowbound) +','+1+')' );
+  } else if (emphasis === "b") {
+    return ( 'rgba('+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(lowbound,255) +','+1+')' );
+  } else {
+    console.log("randColorPrimary: that's not an option");
     return undefined;
   }
 }
