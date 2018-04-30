@@ -29,19 +29,25 @@ var mySeed;
 function Seed(context) {
   this.ctx = context;
   this.arcLayers = [];
-  this.defaultColor = 'rgba(20, 20, 200,1)';  // blue
+  this.defaultAlpha = 0.5;
+  this.defaultColor = 'rgba(20, 20, 200,0.5)';  // blue
   this.defaultWidth = 2;
   this.radCoef = (Math.PI / 3);
   this.stretch = 0;
-  this.radRotate = Math.PI/540;  // speed of rotation in radians
+  this.radRotate = Math.PI/720;  // speed of rotation in radians
   this.cr = 40; // base circle radius
+  this.rotateSwitch = false;
+  this.colorSwitch = false;
+  this.fillSwitch = false;
 
   this.init = function() {
     let radius = this.cr;
+    let da = this.defaultAlpha;
     let cl;
+    this.defaultColor = 'rgba(20, 20, 200,'+da+')';  // blue
 
     // let rc0 = randColor('rgba');
-    let rc0 = randColorPimary('r');
+    let rc0 = randColorPimary('r',0.5);
     let layerNumber = 0;
     // center circle layer
     this.arcLayers.push([{  x:     400,
@@ -51,7 +57,7 @@ function Seed(context) {
                         }]);
     // layer 1
     // let rc1 = randColor('rgba');
-    let rc1 = randColorPimary('r');
+    let rc1 = randColorPimary('r',0.5);
     cl = 1;
     this.arcLayers.push([]);
     for (let i = 0; i < 6; i++) {
@@ -66,7 +72,7 @@ function Seed(context) {
     }
     // layer 2
     // let rc2 = randColor('rgba');
-    let rc2 = randColorPimary('b');
+    let rc2 = randColorPimary('b',0.5);
     cl = 2;
     this.arcLayers.push([]);
     for (let i = 0; i < 6; i++) {
@@ -81,7 +87,7 @@ function Seed(context) {
     }
     // layer 2a
     // let rc2a = randColor('rgba');
-    let rc2a = randColorPimary('b');
+    let rc2a = randColorPimary('b',0.5);
     // d = distance between centers
     let d = mySeed.arcLayers[2][0].x - mySeed.arcLayers[1][0].x;
     let r1 = mySeed.arcLayers[1][0].r;
@@ -104,7 +110,7 @@ function Seed(context) {
     }
     // layer 3
     // let rc3 = randColor('rgba');
-    let rc3 = randColorPimary('b');
+    let rc3 = randColorPimary('b',0.5);
     cl = 3;
     this.arcLayers.push([]);
     for (let i = 0; i < 6; i++) {
@@ -119,7 +125,7 @@ function Seed(context) {
     }
     // layer 3a
     // let rc3a = randColor('rgba');
-    let rc3a = randColorPimary('b');
+    let rc3a = randColorPimary('b',0.5);
     cl = 3;
     for (let i = 0; i < 6; i++) {
       let xdif, ydif;
@@ -148,7 +154,7 @@ function Seed(context) {
 
     // layer 4
     // let rc4 = randColor('rgba');
-    let rc4 = randColorPimary('g');
+    let rc4 = randColorPimary('g',0.5);
     cl = 4;
     this.arcLayers.push([]);
     for (let i = 0; i < 6; i++) {
@@ -163,7 +169,7 @@ function Seed(context) {
     }
     // layer 4a
     // let rc4a = randColor('rgba');
-    let rc4a = randColorPimary('g');
+    let rc4a = randColorPimary('g',0.5);
     cl = 4;
     for (let i = 0; i < 6; i++) {
       let xdif, ydif;
@@ -236,9 +242,13 @@ function Seed(context) {
   };
 
   this.update = function() {
-    this.ctx.translate(400,400);
-    this.ctx.rotate( this.radRotate );
-    this.ctx.translate(-400,-400);
+
+    if (this.rotateSwitch === true) {
+        this.ctx.translate(400,400);
+        this.ctx.rotate( this.radRotate );
+        this.ctx.translate(-400,-400);
+    }
+
   };
 
 } // seed
@@ -273,14 +283,15 @@ function randColor(type) {
   }
 }
 
-function randColorPimary(emphasis) {
-  let lowbound = 100;
+function randColorPimary(emphasis,alpha) {
+  let lowbound = 30;
+  let emphasisLowbound = lowbound + 50; // to force the emphasis color to be brighter
   if (emphasis === "r") {
-    return ( 'rgba('+ getRandomIntInclusive(lowbound,255) +','+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(0,lowbound) +','+1+')' );
+    return ( 'rgba('+ getRandomIntInclusive(emphasisLowbound,255) +','+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(0,lowbound) +','+alpha+')' );
   } else if (emphasis === "g") {
-    return ( 'rgba('+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(100,255) +','+ getRandomIntInclusive(0,lowbound) +','+1+')' );
+    return ( 'rgba('+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(emphasisLowbound,255) +','+ getRandomIntInclusive(0,lowbound) +','+alpha+')' );
   } else if (emphasis === "b") {
-    return ( 'rgba('+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(lowbound,255) +','+1+')' );
+    return ( 'rgba('+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(0,lowbound) +','+ getRandomIntInclusive(emphasisLowbound,255) +','+alpha+')' );
   } else {
     console.log("randColorPrimary: that's not an option");
     return undefined;

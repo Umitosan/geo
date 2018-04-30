@@ -4,15 +4,26 @@
     <meta charset="utf-8">
     <title>Seed</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css?family=Comfortaa|Nanum+Gothic+Coding" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa|Nanum+Gothic+Coding|family=Lato|Montserrat" rel="stylesheet">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="scripts.js"></script>
   </head>
   <body>
 
-  <div id="canvas-container">
+  <div id="main-container">
     <div class="title">FLOWER OF LIFE</div>
-    <canvas id="canvas" width="800" height="800" ></canvas>
+    <div class="controls">
+      <div id="b-rot" class="button-custom"><span class="b-text">Rotate<span></div>
+      <div id="b-col" class="button-custom"><span class="b-text">Color<span></div>
+      <div id="b-fill" class="button-custom"><span class="b-text">Fill</span></div>
+      <label id="label-colors-min" for="colors-min">color min</label>
+      <input class="input-num" id="inp-colors-min" type="number" name="colors-min" value="30">
+      <label id="label-colors-max" for="colors-max">color max</label>
+      <input class="input-num" id="inp-colors-max" type="number" name="colors-max" value="255">
+    </div>
+    <div id="canvas-container">
+      <canvas id="canvas" width="800" height="800" ></canvas>
+    </div>
   </div>
 
   </body>

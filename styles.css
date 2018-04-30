@@ -3,29 +3,91 @@
 /*
 font-family: 'Comfortaa', cursive;
 font-family: 'Nanum Gothic Coding', monospace;
+font-family: 'Lato', sans-serif;
+font-family: 'Montserrat', sans-serif;
 */
 
 .title {
   margin-top: 30px;
   text-align: center;
-  font-size: 56px;
+  font-size: 58px;
   font-family: 'Comfortaa', cursive;
 }
 
-#canvas-container {
+.controls {
+  margin: 10px auto 10px auto;  /* up right down left */
+  height: 40px;
+  width: 600px;
+  border-radius: 1px;
+  /* border-style: solid;
+  border-color: green;
+  border-width: 1px;
+  margin-bottom: 10px; */
+}
+
+.button-custom {
+  display: inline-flex;
+  height: 30px;
+  width: 100px;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 19px;
+  background-color: green;
+  border-radius: 3px;
+}
+
+.button-custom:hover {
+  background-color: pink;
+}
+
+.b-text {
+  margin: auto auto;
+  color: white;
+}
+
+#label-colors-min {
+  margin-left: 20px;
+}
+
+#b-rot {
+}
+#b-col {
+}
+#b-fill {
+}
+#inp-layers {
+}
+
+.input-num {
+  width: 60px;
+}
+
+#main-container {
   margin: 0px auto 0px auto;
   width: 1000px;
-  height: 1000px;
+  height: 1200px;
   /* border-radius: 5px;
   border-style: solid;
   border-color: green;
   border-width: 2px; */
 }
 
-#canvas  {
-  margin: 30px 10%;
-  border-radius: 10px;
+#canvas-container {
+  margin: 0px auto 0px auto; /* up right down left */
+  width: 801px;
+  height: 801px;
+  border-radius: 5px;
   border-style: solid;
-  border-color: green;
-  border-width: 10px;
+  border-color: lightgrey;
+  border-width: 8px;
+}
+
+#canvas  {
+  margin: auto auto auto auto; /* up right down left */
+  width: 800px;
+  height: 800px;
+  /* border-radius: 2px;
+  border-style: solid;
+  border-color: pink;
+  border-width: 2px; */
 }
