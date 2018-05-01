@@ -16,13 +16,31 @@ font-family: 'Montserrat', sans-serif;
 
 .controls {
   margin: 10px auto 10px auto;  /* up right down left */
-  height: 40px;
+  height: auto;
   width: 600px;
-  border-radius: 1px;
-  /* border-style: solid;
+  /* border-radius: 1px;
+  border-style: solid;
   border-color: green;
-  border-width: 1px;
-  margin-bottom: 10px; */
+  border-width: 1px; */
+}
+
+.control-group {
+  margin: 2px auto 2px auto;
+  height: 30px;
+  /* border-radius: 1px;
+  border-style: solid;
+  border-color: red;
+  border-width: 1px; */
+}
+
+#cg1 {
+  text-align: center;
+  /* width: 430px; */
+}
+
+#cg2 {
+  text-align: center;
+  /* width: 430px; */
 }
 
 .button-custom {
@@ -31,7 +49,7 @@ font-family: 'Montserrat', sans-serif;
   width: 100px;
   text-align: center;
   font-family: 'Montserrat', sans-serif;
-  font-size: 19px;
+  font-size: 14px;
   background-color: green;
   border-radius: 3px;
   cursor: pointer;
@@ -48,15 +66,6 @@ font-family: 'Montserrat', sans-serif;
 
 #label-colors-min {
   margin-left: 20px;
-}
-
-#b-rot {
-}
-#b-col {
-}
-#b-fill {
-}
-#inp-layers {
 }
 
 .input-num {

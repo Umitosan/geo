@@ -25,14 +25,15 @@ var myReq,
     ctx,
     mySeed;
 var  rotateSwitch = false;
-var  fillSwitch = false;
+var  fillSwitch = true;
 // var  colorSwitch = false;
 
 function Seed(context) {
   this.ctx = context;
   this.arcLayers = [];
-  this.defaultAlpha = 0.5;
-  this.defaultColor = 'rgba(20, 20, 200,0.5)';  // blue
+  this.defaultFillAlpha = 0.2;
+  this.defaultLineAlpha = 0.5;
+  this.defaultColor = '';
   this.defaultWidth = 2;
   this.radCoef = (Math.PI / 3);
   this.stretch = 0;
@@ -41,22 +42,21 @@ function Seed(context) {
 
   this.init = function() {
     let radius = this.cr;
-    let da = this.defaultAlpha;
-    let cl;
-    this.defaultColor = 'rgba(20, 20, 200,'+da+')';  // blue
+    let dla = this.defaultLineAlpha;
+    let dfa = this.defaultFillAlpha;
+    let cl; // current layer number
+    let rc; // random color
+    this.defaultColor = 'rgba(20, 20, 200,'+dla+')';  // blue
 
-    // let rc0 = randColor('rgba');
-    let rc0 = randColorPimary('r',0.5);
-    let layerNumber = 0;
+    rc = randColorPimary('r',0.5);
     // center circle layer
     this.arcLayers.push([{  x:     400,
                             y:     400,
                             r:     radius,
-                            color: rc0
+                            color: rc
                         }]);
     // layer 1
-    // let rc1 = randColor('rgba');
-    let rc1 = randColorPimary('r',0.5);
+    rc = randColorPimary('r',dla);
     cl = 1;
     this.arcLayers.push([]);
     for (let i = 0; i < 6; i++) {
@@ -66,12 +66,11 @@ function Seed(context) {
       this.arcLayers[1].push({ x:     computedX,
                                y:     computedY,
                                r:     radius,
-                               color: rc1
+                               color: rc
                             });
     }
     // layer 2
-    // let rc2 = randColor('rgba');
-    let rc2 = randColorPimary('b',0.5);
+    rc = randColorPimary('b',dla);
     cl = 2;
     this.arcLayers.push([]);
     for (let i = 0; i < 6; i++) {
@@ -81,12 +80,11 @@ function Seed(context) {
       this.arcLayers[2].push({ x:     computedX,
                                y:     computedY,
                                r:     radius,
-                               color: rc2
+                               color: rc
                             });
     }
     // layer 2a
-    // let rc2a = randColor('rgba');
-    let rc2a = randColorPimary('b',0.5);
+    rc = randColorPimary('b',dla);
     // d = distance between centers
     let d = mySeed.arcLayers[2][0].x - mySeed.arcLayers[1][0].x;
     let r1 = mySeed.arcLayers[1][0].r;
@@ -104,72 +102,26 @@ function Seed(context) {
       this.arcLayers[2].push({ x:     computedX,
                                y:     computedY,
                                r:     radius,
-                               color: rc2a
+                               color: rc
                             });
     }
     // layer 3
-    // let rc3 = randColor('rgba');
-    let rc3 = randColorPimary('b',0.5);
     cl = 3;
-    this.arcLayers.push([]);
-    for (let i = 0; i < 6; i++) {
-      let theta = i * (Math.PI / (3));
-      let computedX = radius * Math.cos(theta)*cl;
-      let computedY = radius * Math.sin(theta)*cl;
-      this.arcLayers[3].push({ x:     computedX,
-                               y:     computedY,
-                               r:     radius,
-                               color: rc3
-                            });
-    }
-    // layer 3a
-    // let rc3a = randColor('rgba');
-    let rc3a = randColorPimary('b',0.5);
-    cl = 3;
-    for (let i = 0; i < 6; i++) {
-      let xdif, ydif;
-      if (i !== 5) {
-        xdif = this.arcLayers[3][i].x - this.arcLayers[3][i+1].x;
-        ydif = this.arcLayers[3][i].y - this.arcLayers[3][i+1].y;
-      } else {
-        xdif = this.arcLayers[3][5].x - this.arcLayers[3][0].x;
-        ydif = this.arcLayers[3][5].y - this.arcLayers[3][0].y;
-      }
-      let someX1 = this.arcLayers[3][i].x - (xdif/3);
-      let someY1 = this.arcLayers[3][i].y - (ydif/3);
-      let someX2 = this.arcLayers[3][i].x - (2*xdif/3);
-      let someY2 = this.arcLayers[3][i].y - (2*ydif/3);
-      this.arcLayers[3].push({ x:     someX1,
-                               y:     someY1,
-                               r:     radius,
-                               color: rc3a
-                            });
-      this.arcLayers[3].push({ x:     someX2,
-                               y:     someY2,
-                               r:     radius,
-                               color: rc3a
-                            });
-    }
-
-    // layer 4
-    // let rc4 = randColor('rgba');
-    let rc4 = randColorPimary('g',0.5);
-    cl = 4;
-    this.arcLayers.push([]);
+    rc = randColorPimary('b',dla);
+    this.arcLayers.push([]); // prepare empty layer array
+    // create 6 points for new layer
     for (let i = 0; i < 6; i++) {
       let theta = i * (Math.PI / (3));
       let computedX = radius * Math.cos(theta)*cl;
       let computedY = radius * Math.sin(theta)*cl;
       this.arcLayers[cl].push({ x:     computedX,
-                               y:     computedY,
-                               r:     radius,
-                               color: rc4
+                                y:     computedY,
+                                r:     radius,
+                                color: rc
                             });
     }
-    // layer 4a
-    // let rc4a = randColor('rgba');
-    let rc4a = randColorPimary('g',0.5);
-    cl = 4;
+    rc = randColorPimary('g',dla);
+    // creates the corret number of circles between the 6 points for given layer
     for (let i = 0; i < 6; i++) {
       let xdif, ydif;
       if (i !== 5) {
@@ -179,52 +131,110 @@ function Seed(context) {
         xdif = this.arcLayers[cl][5].x - this.arcLayers[cl][0].x;
         ydif = this.arcLayers[cl][5].y - this.arcLayers[cl][0].y;
       }
-      let someX1 = this.arcLayers[cl][i].x - (xdif/4);
-      let someY1 = this.arcLayers[cl][i].y - (ydif/4);
-      let someX2 = this.arcLayers[cl][i].x - (2*xdif/4);
-      let someY2 = this.arcLayers[cl][i].y - (2*ydif/4);
-      let someX3 = this.arcLayers[cl][i].x - (3*xdif/4);
-      let someY3 = this.arcLayers[cl][i].y - (3*ydif/4);
-      this.arcLayers[cl].push({ x:     someX1,
-                                y:     someY1,
+      for (var j = 1; j < cl; j++) {
+        let xx = this.arcLayers[cl][i].x - (j*xdif/cl);
+        let yy = this.arcLayers[cl][i].y - (j*ydif/cl);
+        this.arcLayers[cl].push({ x:     xx,
+                                  y:     yy,
+                                  r:     radius,
+                                  color: rc
+                                });
+      }
+    } // for
+
+    // layer 4
+    cl = 4;
+    rc = randColorPimary('b',dla);
+    this.arcLayers.push([]); // prepare empty layer array
+    // create 6 points for new layer
+    for (let i = 0; i < 6; i++) {
+      let theta = i * (Math.PI / (3));
+      let computedX = radius * Math.cos(theta)*cl;
+      let computedY = radius * Math.sin(theta)*cl;
+      this.arcLayers[cl].push({ x:     computedX,
+                                y:     computedY,
                                 r:     radius,
-                                color: rc4a
-                              });
-      this.arcLayers[cl].push({ x:     someX2,
-                                y:     someY2,
-                                r:     radius,
-                                color: rc4a
-                              });
-      this.arcLayers[cl].push({ x:     someX3,
-                                y:     someY3,
-                                r:     radius,
-                                color: rc4a
-                              });
+                                color: rc
+                            });
     }
+    rc = randColorPimary('g',dla);
+    // creates the corret number of circles between the 6 points for given layer
+    for (let i = 0; i < 6; i++) {
+      let xdif, ydif;
+      if (i !== 5) {
+        xdif = this.arcLayers[cl][i].x - this.arcLayers[cl][i+1].x;
+        ydif = this.arcLayers[cl][i].y - this.arcLayers[cl][i+1].y;
+      } else {
+        xdif = this.arcLayers[cl][5].x - this.arcLayers[cl][0].x;
+        ydif = this.arcLayers[cl][5].y - this.arcLayers[cl][0].y;
+      }
+      for (var j = 1; j < cl; j++) {
+        let xx = this.arcLayers[cl][i].x - (j*xdif/cl);
+        let yy = this.arcLayers[cl][i].y - (j*ydif/cl);
+        this.arcLayers[cl].push({ x:     xx,
+                                  y:     yy,
+                                  r:     radius,
+                                  color: rc
+                                });
+      }
+    } // for
+
+    // layer 5
+    cl = 5;
+    rc = randColorPimary('b',dla);
+    this.arcLayers.push([]); // prepare empty layer array
+    // create 6 points for new layer
+    for (let i = 0; i < 6; i++) {
+      let theta = i * (Math.PI / (3));
+      let computedX = radius * Math.cos(theta)*cl;
+      let computedY = radius * Math.sin(theta)*cl;
+      this.arcLayers[cl].push({ x:     computedX,
+                                y:     computedY,
+                                r:     radius,
+                                color: rc
+                            });
+    }
+    rc = randColorPimary('g',dla);
+    // creates the corret number of circles between the 6 points for given layer
+    for (let i = 0; i < 6; i++) {
+      let xdif, ydif;
+      if (i !== 5) {
+        xdif = this.arcLayers[cl][i].x - this.arcLayers[cl][i+1].x;
+        ydif = this.arcLayers[cl][i].y - this.arcLayers[cl][i+1].y;
+      } else {
+        xdif = this.arcLayers[cl][5].x - this.arcLayers[cl][0].x;
+        ydif = this.arcLayers[cl][5].y - this.arcLayers[cl][0].y;
+      }
+      for (var j = 1; j < cl; j++) {
+        let xx = this.arcLayers[cl][i].x - (j*xdif/cl);
+        let yy = this.arcLayers[cl][i].y - (j*ydif/cl);
+        this.arcLayers[cl].push({ x:     xx,
+                                  y:     yy,
+                                  r:     radius,
+                                  color: rc
+                                });
+      }
+    } // for
 
 
   }; // init
 
   this.newColors = function() {
+    let dla = this.defaultLineAlpha;
     for (let i = 0; i < this.arcLayers.length; i++) {
       for (let j = 0; j < this.arcLayers[i].length; j++) {
-        this.arcLayers[i][j].color = randColor('rgba',0.5);
+        this.arcLayers[i][j].color = randColor('rgba',dla);
       }
     }
+  };
+
+  this.newRGBcolors = function() {
+
   };
 
   this.draw = function() {
     let cl = 0; // cl = current layer
     clearCanvas();
-
-    // draw tmp intersection liney
-    // this.ctx.beginPath();
-    // this.ctx.translate(400,400);
-    // this.ctx.moveTo(-400,this.liney);
-    // this.ctx.lineTo(400,this.liney);
-    // this.ctx.translate(-400,-400);
-    // this.ctx.stroke();
-
     // paint layers from outside in so that inner layers are very visible
     for (var i = this.arcLayers.length-1; i > 0; i--) {
       let cl = i;
@@ -240,7 +250,6 @@ function Seed(context) {
         this.ctx.stroke();
       }
     }
-
     // draw the center circle
     this.ctx.beginPath();
     this.ctx.strokeStyle = this.arcLayers[0][0].color;
@@ -249,8 +258,7 @@ function Seed(context) {
     this.ctx.arc(this.arcLayers[0][0].x,this.arcLayers[0][0].y,this.arcLayers[0][0].r,0,360);
     if (fillSwitch) this.ctx.fill();
     this.ctx.stroke();
-
-  };
+  }; // end draw
 
   this.update = function() {
     if (rotateSwitch === true) {
@@ -258,7 +266,7 @@ function Seed(context) {
         this.ctx.rotate( this.radRotate );
         this.ctx.translate(-400,-400);
     }
-  };
+  }; // end update
 
 } // seed
 
@@ -292,7 +300,7 @@ function randColor(type,alpha) {
   }
 }
 
-function randColorPimary(emphasis,alpha) {
+function randColorPimary(emphasis, alpha = 1) {
   let lowbound = 30;
   let emphasisLowbound = lowbound + 50; // to force the emphasis color to be brighter
   if (emphasis === "r") {
@@ -355,9 +363,13 @@ $(document).ready( function() {
     console.log('rotate clicked');
     toggleRotate();
   });
-  $('#b-col').click(function() {
-    console.log('color clicked');
+  $('#b-col-rand').click(function() {
+    console.log('rand color clicked');
     mySeed.newColors();
+  });
+  $('#b-col-rgb').click(function() {
+    console.log('rgb color clicked');
+    mySeed.newRGBcolors();
   });
   $('#b-fill').click(function() {
     console.log('fill clicked');
