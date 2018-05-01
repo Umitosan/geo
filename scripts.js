@@ -20,11 +20,13 @@
 // y = r * sin(a)
 
 
-var myReq;
-var canvas;
-var ctx;
-var mySeed;
-
+var myReq,
+    canvas,
+    ctx,
+    mySeed;
+var  rotateSwitch = false;
+var  fillSwitch = false;
+// var  colorSwitch = false;
 
 function Seed(context) {
   this.ctx = context;
@@ -36,9 +38,6 @@ function Seed(context) {
   this.stretch = 0;
   this.radRotate = Math.PI/720;  // speed of rotation in radians
   this.cr = 40; // base circle radius
-  this.rotateSwitch = false;
-  this.colorSwitch = false;
-  this.fillSwitch = false;
 
   this.init = function() {
     let radius = this.cr;
@@ -206,6 +205,14 @@ function Seed(context) {
 
   }; // init
 
+  this.newColors = function() {
+    for (let i = 0; i < this.arcLayers.length; i++) {
+      for (let j = 0; j < this.arcLayers[i].length; j++) {
+        this.arcLayers[i][j].color = randColor('rgba',0.5);
+      }
+    }
+  };
+
   this.draw = function() {
     let cl = 0; // cl = current layer
     clearCanvas();
@@ -224,10 +231,12 @@ function Seed(context) {
       for (var j = 0; j < this.arcLayers[cl].length; j++) {
         this.ctx.beginPath();
         this.ctx.strokeStyle = this.arcLayers[cl][j].color;
+        this.ctx.fillStyle = this.arcLayers[cl][j].color;
         this.ctx.lineWidth = this.defaultWidth;
         this.ctx.translate(400,400);
         this.ctx.arc(this.arcLayers[cl][j].x,this.arcLayers[cl][j].y,this.arcLayers[cl][j].r,0,360);
         this.ctx.translate(-400,-400);
+        if (fillSwitch) this.ctx.fill();
         this.ctx.stroke();
       }
     }
@@ -235,20 +244,20 @@ function Seed(context) {
     // draw the center circle
     this.ctx.beginPath();
     this.ctx.strokeStyle = this.arcLayers[0][0].color;
+    this.ctx.fillStyle = this.arcLayers[0][0].color;
     this.ctx.lineWidth = this.defaultWidth;
     this.ctx.arc(this.arcLayers[0][0].x,this.arcLayers[0][0].y,this.arcLayers[0][0].r,0,360);
+    if (fillSwitch) this.ctx.fill();
     this.ctx.stroke();
 
   };
 
   this.update = function() {
-
-    if (this.rotateSwitch === true) {
+    if (rotateSwitch === true) {
         this.ctx.translate(400,400);
         this.ctx.rotate( this.radRotate );
         this.ctx.translate(-400,-400);
     }
-
   };
 
 } // seed
@@ -269,14 +278,14 @@ function getRadianAngle(degreeValue) {
   return degreeValue * Math.PI / 180;
 }
 
-function randColor(type) {
+function randColor(type,alpha) {
   // more muted colors example
       // return ( "#" + Math.round((getRandomIntInclusive(0,99999999) + 0x77000000)).toString(16) );
   // full spectum below
   if (type === 'hex') {
     return ( "#" + Math.round((getRandomIntInclusive(0,0xffffff))).toString(16) );
   } else if (type === 'rgba') {
-    return ( 'rgba('+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+1+')' );
+    return ( 'rgba('+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+ getRandomIntInclusive(0,255) +','+alpha+')' );
   } else {
     console.log("Not valid option for randColor()");
     return undefined;
@@ -308,6 +317,24 @@ function invertRGBAstr(str) {
   return 'rgba('+r+','+g+','+b+','+a+')';
 }
 
+function toggleRotate() {
+  if (rotateSwitch === true) {
+    rotateSwitch = false;
+  } else {
+    rotateSwitch = true;
+  }
+}
+
+function toggleFill() {
+  if (fillSwitch === true) {
+    fillSwitch = false;
+    $('#b-fill span').text('Fill');
+  } else {
+    fillSwitch = true;
+    $('#b-fill span').text('Wire');
+  }
+}
+
 // GAMELOOP
 function gameLoop(timestamp) {
   myReq = requestAnimationFrame(gameLoop);
@@ -323,5 +350,18 @@ $(document).ready( function() {
   mySeed = new Seed(ctx);
   mySeed.init();
   myReq = requestAnimationFrame(gameLoop);
+
+  $('#b-rot').click(function() {
+    console.log('rotate clicked');
+    toggleRotate();
+  });
+  $('#b-col').click(function() {
+    console.log('color clicked');
+    mySeed.newColors();
+  });
+  $('#b-fill').click(function() {
+    console.log('fill clicked');
+    toggleFill();
+  });
 
 });
