@@ -24,8 +24,8 @@ var myReq,
     canvas,
     ctx,
     mySeed;
-var  rotateSwitch = false;
-var  fillSwitch = true;
+var rotateSwitch = true;
+var fillSwitch = true;
 // var  colorSwitch = false;
 
 function Seed(context) {
