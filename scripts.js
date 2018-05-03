@@ -131,7 +131,7 @@ function Seed(context) {
         xdif = this.arcLayers[cl][5].x - this.arcLayers[cl][0].x;
         ydif = this.arcLayers[cl][5].y - this.arcLayers[cl][0].y;
       }
-      for (var j = 1; j < cl; j++) {
+      for (let j = 1; j < cl; j++) {
         let xx = this.arcLayers[cl][i].x - (j*xdif/cl);
         let yy = this.arcLayers[cl][i].y - (j*ydif/cl);
         this.arcLayers[cl].push({ x:     xx,
@@ -168,7 +168,7 @@ function Seed(context) {
         xdif = this.arcLayers[cl][5].x - this.arcLayers[cl][0].x;
         ydif = this.arcLayers[cl][5].y - this.arcLayers[cl][0].y;
       }
-      for (var j = 1; j < cl; j++) {
+      for (let j = 1; j < cl; j++) {
         let xx = this.arcLayers[cl][i].x - (j*xdif/cl);
         let yy = this.arcLayers[cl][i].y - (j*ydif/cl);
         this.arcLayers[cl].push({ x:     xx,
@@ -205,7 +205,7 @@ function Seed(context) {
         xdif = this.arcLayers[cl][5].x - this.arcLayers[cl][0].x;
         ydif = this.arcLayers[cl][5].y - this.arcLayers[cl][0].y;
       }
-      for (var j = 1; j < cl; j++) {
+      for (let j = 1; j < cl; j++) {
         let xx = this.arcLayers[cl][i].x - (j*xdif/cl);
         let yy = this.arcLayers[cl][i].y - (j*ydif/cl);
         this.arcLayers[cl].push({ x:     xx,
