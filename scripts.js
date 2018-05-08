@@ -156,7 +156,14 @@ function Seed(context) {
 
   this.draw = function() {
     let cl = 0; // cl = current layer
-    clearCanvas();
+    if (totalLayers < 11) {
+      clearCanvas();
+    } else if (totalLayers >= 11) {
+      clearCanvasLarge();
+    } else {
+      // nothin
+    }
+
     // paint layers from outside in so that inner layers are very visible
     for (var i = this.arcLayers.length-1; i > 0; i--) {
       let cl = i;
@@ -316,7 +323,7 @@ $(document).ready( function() {
     } else {
       // nothin
     }
-    clearCanvasLarge()
+    clearCanvasLarge();
     mySeed.build();
   });
 
