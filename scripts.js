@@ -46,6 +46,7 @@ function Seed(context) {
     let dfa = this.defaultFillAlpha;
     let cl; // current layer number
     let rc; // random color
+    let totalLayers = 6;
     this.defaultColor = 'rgba(20, 20, 200,'+dla+')';  // blue
 
     rc = randColorPimary('r',0.5);
@@ -69,176 +70,68 @@ function Seed(context) {
                                 color: rc
                             });
     }
-    // layer 2
-    rc = randColorPimary('b',dla);
-    cl = 2;
-    this.arcLayers.push([]);
-    for (let i = 0; i < 6; i++) {
-      let theta = i * (Math.PI / (3));
-      let computedX = radius * Math.cos(theta)*cl;
-      let computedY = radius * Math.sin(theta)*cl;
-      this.arcLayers[cl].push({ x:     computedX,
-                               y:     computedY,
-                               r:     radius,
-                               color: rc
-                            });
+
+    for (cl = 2; cl < (totalLayers+1); cl++) {
+              // layer 2
+              rc = randColorPimary('b',dla);
+              this.arcLayers.push([]);
+              for (let i = 0; i < 6; i++) {
+                let theta = i * (Math.PI / (3));
+                let computedX = radius * Math.cos(theta)*cl;
+                let computedY = radius * Math.sin(theta)*cl;
+                this.arcLayers[cl].push({ x:     computedX,
+                                         y:     computedY,
+                                         r:     radius,
+                                         color: rc
+                                      });
+              }
+              rc = randColorPimary('g',dla);
+              // creates the corret number of circles between the 6 points for given layer
+              for (let i = 0; i < 6; i++) {
+                let xdif, ydif;
+                if (i !== 5) {
+                  xdif = this.arcLayers[cl][i].x - this.arcLayers[cl][i+1].x;
+                  ydif = this.arcLayers[cl][i].y - this.arcLayers[cl][i+1].y;
+                } else {
+                  xdif = this.arcLayers[cl][5].x - this.arcLayers[cl][0].x;
+                  ydif = this.arcLayers[cl][5].y - this.arcLayers[cl][0].y;
+                }
+                for (let j = 1; j < cl; j++) {
+                  let xx = this.arcLayers[cl][i].x - (j*xdif/cl);
+                  let yy = this.arcLayers[cl][i].y - (j*ydif/cl);
+                  this.arcLayers[cl].push({ x:     xx,
+                                            y:     yy,
+                                            r:     radius,
+                                            color: rc
+                                          });
+                }
+              } // for
     }
-    rc = randColorPimary('r',dla);
-    // creates the corret number of circles between the 6 points for given layer
-    for (let i = 0; i < 6; i++) {
-      let xdif, ydif;
-      if (i !== 5) {
-        xdif = this.arcLayers[cl][i].x - this.arcLayers[cl][i+1].x;
-        ydif = this.arcLayers[cl][i].y - this.arcLayers[cl][i+1].y;
-      } else {
-        xdif = this.arcLayers[cl][5].x - this.arcLayers[cl][0].x;
-        ydif = this.arcLayers[cl][5].y - this.arcLayers[cl][0].y;
-      }
-      for (let j = 1; j < cl; j++) {
-        let xx = this.arcLayers[cl][i].x - (j*xdif/cl);
-        let yy = this.arcLayers[cl][i].y - (j*ydif/cl);
-        this.arcLayers[cl].push({ x:     xx,
-                                  y:     yy,
-                                  r:     radius,
-                                  color: rc
-                                });
-      }
-    } // for
 
-    // // layer 2a (OLD VERSION)
-    // rc = randColorPimary('b',dla);
-    // // d = distance between centers
-    // let d = mySeed.arcLayers[2][0].x - mySeed.arcLayers[1][0].x;
-    // let r1 = mySeed.arcLayers[1][0].r;
-    // let r2 = mySeed.arcLayers[2][0].r;
-    // // x = ( d^2 - r2^2 + r1^2) / ( 2d )
-    // let x = ( (Math.pow(d,2) - Math.pow(r2,2) + Math.pow(r1,2)) / ( 2*d ) ) + r1;
-    // // tan(angle) = opp / adj
-    // // y = x * tan(angle)
-    // let y = x * Math.tan(Math.PI / 6);
-    // let nRadius = Math.sqrt( Math.pow(x,2) + Math.pow(y,2) );
-    // for (let i = 0; i < 6; i++) {
-    //   let theta = i * (Math.PI / 3) + (Math.PI / 6);
-    //   let computedX = nRadius * Math.cos(theta);
-    //   let computedY = nRadius * Math.sin(theta);
-    //   this.arcLayers[2].push({ x:     computedX,
-    //                            y:     computedY,
-    //                            r:     radius,
-    //                            color: rc
-    //                         });
-    // }
-
-
-    // layer 3
-    cl = 3;
-    rc = randColorPimary('b',dla);
-    this.arcLayers.push([]); // prepare empty layer array
-    // create 6 points for new layer
-    for (let i = 0; i < 6; i++) {
-      let theta = i * (Math.PI / (3));
-      let computedX = radius * Math.cos(theta)*cl;
-      let computedY = radius * Math.sin(theta)*cl;
-      this.arcLayers[cl].push({ x:     computedX,
-                                y:     computedY,
-                                r:     radius,
-                                color: rc
-                            });
-    }
-    rc = randColorPimary('g',dla);
-    // creates the corret number of circles between the 6 points for given layer
-    for (let i = 0; i < 6; i++) {
-      let xdif, ydif;
-      if (i !== 5) {
-        xdif = this.arcLayers[cl][i].x - this.arcLayers[cl][i+1].x;
-        ydif = this.arcLayers[cl][i].y - this.arcLayers[cl][i+1].y;
-      } else {
-        xdif = this.arcLayers[cl][5].x - this.arcLayers[cl][0].x;
-        ydif = this.arcLayers[cl][5].y - this.arcLayers[cl][0].y;
-      }
-      for (let j = 1; j < cl; j++) {
-        let xx = this.arcLayers[cl][i].x - (j*xdif/cl);
-        let yy = this.arcLayers[cl][i].y - (j*ydif/cl);
-        this.arcLayers[cl].push({ x:     xx,
-                                  y:     yy,
-                                  r:     radius,
-                                  color: rc
-                                });
-      }
-    } // for
-
-    // layer 4
-    cl = 4;
-    rc = randColorPimary('b',dla);
-    this.arcLayers.push([]); // prepare empty layer array
-    // create 6 points for new layer
-    for (let i = 0; i < 6; i++) {
-      let theta = i * (Math.PI / (3));
-      let computedX = radius * Math.cos(theta)*cl;
-      let computedY = radius * Math.sin(theta)*cl;
-      this.arcLayers[cl].push({ x:     computedX,
-                                y:     computedY,
-                                r:     radius,
-                                color: rc
-                            });
-    }
-    rc = randColorPimary('g',dla);
-    // creates the corret number of circles between the 6 points for given layer
-    for (let i = 0; i < 6; i++) {
-      let xdif, ydif;
-      if (i !== 5) {
-        xdif = this.arcLayers[cl][i].x - this.arcLayers[cl][i+1].x;
-        ydif = this.arcLayers[cl][i].y - this.arcLayers[cl][i+1].y;
-      } else {
-        xdif = this.arcLayers[cl][5].x - this.arcLayers[cl][0].x;
-        ydif = this.arcLayers[cl][5].y - this.arcLayers[cl][0].y;
-      }
-      for (let j = 1; j < cl; j++) {
-        let xx = this.arcLayers[cl][i].x - (j*xdif/cl);
-        let yy = this.arcLayers[cl][i].y - (j*ydif/cl);
-        this.arcLayers[cl].push({ x:     xx,
-                                  y:     yy,
-                                  r:     radius,
-                                  color: rc
-                                });
-      }
-    } // for
-
-    // layer 5
-    cl = 5;
-    rc = randColorPimary('b',dla);
-    this.arcLayers.push([]); // prepare empty layer array
-    // create 6 points for new layer
-    for (let i = 0; i < 6; i++) {
-      let theta = i * (Math.PI / (3));
-      let computedX = radius * Math.cos(theta)*cl;
-      let computedY = radius * Math.sin(theta)*cl;
-      this.arcLayers[cl].push({ x:     computedX,
-                                y:     computedY,
-                                r:     radius,
-                                color: rc
-                            });
-    }
-    rc = randColorPimary('g',dla);
-    // creates the corret number of circles between the 6 points for given layer
-    for (let i = 0; i < 6; i++) {
-      let xdif, ydif;
-      if (i !== 5) {
-        xdif = this.arcLayers[cl][i].x - this.arcLayers[cl][i+1].x;
-        ydif = this.arcLayers[cl][i].y - this.arcLayers[cl][i+1].y;
-      } else {
-        xdif = this.arcLayers[cl][5].x - this.arcLayers[cl][0].x;
-        ydif = this.arcLayers[cl][5].y - this.arcLayers[cl][0].y;
-      }
-      for (let j = 1; j < cl; j++) {
-        let xx = this.arcLayers[cl][i].x - (j*xdif/cl);
-        let yy = this.arcLayers[cl][i].y - (j*ydif/cl);
-        this.arcLayers[cl].push({ x:     xx,
-                                  y:     yy,
-                                  r:     radius,
-                                  color: rc
-                                });
-      }
-    } // for
+    // // // layer 2a (OLD VERSION, ALT COMPUTATION METHOD)
+    // // rc = randColorPimary('b',dla);
+    // // // d = distance between centers
+    // // let d = mySeed.arcLayers[2][0].x - mySeed.arcLayers[1][0].x;
+    // // let r1 = mySeed.arcLayers[1][0].r;
+    // // let r2 = mySeed.arcLayers[2][0].r;
+    // // // x = ( d^2 - r2^2 + r1^2) / ( 2d )
+    // // let x = ( (Math.pow(d,2) - Math.pow(r2,2) + Math.pow(r1,2)) / ( 2*d ) ) + r1;
+    // // // tan(angle) = opp / adj
+    // // // y = x * tan(angle)
+    // // let y = x * Math.tan(Math.PI / 6);
+    // // let nRadius = Math.sqrt( Math.pow(x,2) + Math.pow(y,2) );
+    // // for (let i = 0; i < 6; i++) {
+    // //   let theta = i * (Math.PI / 3) + (Math.PI / 6);
+    // //   let computedX = nRadius * Math.cos(theta);
+    // //   let computedY = nRadius * Math.sin(theta);
+    // //   this.arcLayers[2].push({ x:     computedX,
+    // //                            y:     computedY,
+    // //                            r:     radius,
+    // //                            color: rc
+    // //                         });
+    // // }
+    //
+    //
 
 
   }; // init
