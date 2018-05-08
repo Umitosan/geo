@@ -24,8 +24,9 @@ var myReq,
     canvas,
     ctx,
     mySeed;
-var  rotateSwitch = false;
-var  fillSwitch = true;
+var rotateSwitch = false;
+var fillSwitch = true;
+var totalLayers;
 // var  colorSwitch = false;
 
 function Seed(context) {
@@ -40,13 +41,17 @@ function Seed(context) {
   this.radRotate = Math.PI/720;  // speed of rotation in radians
   this.cr = 40; // base circle radius
 
+  this.build = function() {
+    this.arcLayers = [];
+    this.init();
+  };
+
   this.init = function() {
     let radius = this.cr;
     let dla = this.defaultLineAlpha;
     let dfa = this.defaultFillAlpha;
     let cl; // current layer number
     let rc; // random color
-    let totalLayers = 6;
     this.defaultColor = 'rgba(20, 20, 200,'+dla+')';  // blue
 
     rc = randColorPimary('r',0.5);
@@ -71,7 +76,7 @@ function Seed(context) {
                             });
     }
 
-    for (cl = 2; cl < (totalLayers+1); cl++) {
+    for (cl = 2; cl < (totalLayers); cl++) {
               // layer 2
               rc = randColorPimary('b',dla);
               this.arcLayers.push([]);
@@ -193,6 +198,14 @@ function clearCanvas() {
   ctx.clearRect(-1, -1, canvas.width+1, canvas.height+1);
 }
 
+function clearCanvasLarge() {
+  ctx.save();
+  // Use the identity matrix while clearing the canvas
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.restore();
+}
+
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -272,6 +285,7 @@ $(document).ready( function() {
 
   canvas = $('#canvas')[0];
   ctx =  canvas.getContext('2d');
+  totalLayers = parseInt( $('#inp-total-layers').val() );
   mySeed = new Seed(ctx);
   mySeed.init();
   myReq = requestAnimationFrame(gameLoop);
@@ -291,6 +305,19 @@ $(document).ready( function() {
   $('#b-fill').click(function() {
     console.log('fill clicked');
     toggleFill();
+  });
+  $("#inp-total-layers").change( function() {
+    console.log("The total changed");
+    totalLayers = parseInt( $('#inp-total-layers').val() );
+    if ( totalLayers < 2) {
+      $('#inp-total-layers').val(2);
+    } else if ( totalLayers > 20) {
+      $('#inp-total-layers').val(20);
+    } else {
+      // nothin
+    }
+    clearCanvasLarge()
+    mySeed.build();
   });
 
 });
