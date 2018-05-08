@@ -63,10 +63,10 @@ function Seed(context) {
       let theta = i * (Math.PI / (3*cl));
       let computedX = radius * Math.cos(theta);
       let computedY = radius * Math.sin(theta);
-      this.arcLayers[1].push({ x:     computedX,
-                               y:     computedY,
-                               r:     radius,
-                               color: rc
+      this.arcLayers[cl].push({ x:     computedX,
+                                y:     computedY,
+                                r:     radius,
+                                color: rc
                             });
     }
     // layer 2
